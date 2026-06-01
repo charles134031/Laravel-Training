@@ -18,6 +18,11 @@ Route::get('/books', function () {
     return view('books');
 })->name('books');
 
+Route::get('/myprofile', function () {
+    return view('myprofile');
+})->name('myprofile');
+
+
 
 
 

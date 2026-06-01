@@ -40,6 +40,9 @@
             <div class=" justify-content-end">
                 <ul class="navbar-nav">
                     <li class="nav-item">
+                        <a class="nav-link" href="/myprofile">My profile</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#">Logout</a>
                     </li>
                 </ul>
