@@ -22,6 +22,10 @@ Route::get('/myprofile', function () {
     return view('myprofile');
 })->name('myprofile');
 
+Route::get('/mysettings', function () {
+    return view('mysettings');
+})->name('mysettings');
+
 
 
 
