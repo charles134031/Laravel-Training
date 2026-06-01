@@ -14,13 +14,13 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="fullname" class="form-label">Full Name</label>
+                    <label for="fullname"  class="form-label">Full Name</label>
                     <input type="text" class="form-control" id="fullname" name="fullname"
                         value="Charles jay bedana">
                 </div>
 
                 <div class="col-md-6">
-                    <label for="username" class="form-label">Username</label>
+                    <label for="username"  class="form-label">Username</label>
                     <input type="text" class="form-control" id="username" name="username"
                         value="CharlesCoolKid2002">
                 </div>
@@ -28,7 +28,7 @@
 
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="email" class="form-label">Email Address</label>
+                    <label for="email"  class="form-label">Email Address</label>
                     <input type="email" class="form-control" id="email" name="email"
                         value="jprettyshayradalida@gmail.com">
                 </div>
@@ -81,5 +81,7 @@
         </form>
     </div>
 </div>
+
+
 
 @endsection
