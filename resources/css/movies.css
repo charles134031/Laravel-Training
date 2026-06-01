@@ -1,0 +1,57 @@
+/* Card Container */
+.movie-card {
+    background-color: #1e1e24;
+    color: #ffffff;
+    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px auto;
+}
+
+/* Image Styling */
+.movie-poster {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 3px solid #00adb5; /* Adds a nice colorful accent line */
+}
+
+/* Details Padding Wrapper */
+.movie-details {
+    padding: 20px;
+}
+
+/* Title styling */
+.movie-title {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    color: #00adb5;
+}
+
+/* Your original review text */
+.movie-review {
+    font-style: italic;
+    color: #e0e0e0;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-left: 3px solid #ff2e63;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+/* Metadata (Genre, Release date, etc.) */
+.movie-meta {
+    font-size: 14px;
+    margin: 8px 0;
+    color: #b3b3b3;
+}
+
+/* Long Description styling */
+.movie-description {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 15px;
+    color: #cfcfcf;
+}
