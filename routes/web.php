@@ -10,7 +10,7 @@ Route::get('/', function () {
 Route::post('/login' , [userController::class, 'login']);
 
 
-Route::get('/books', [userController::class, 'index']);
+Route::get('/books', [userController::class, 'index'])->name('books');;
 
 
 
@@ -36,6 +36,21 @@ Route::get('/mysettings', function () {
 })->name('mysettings');
 
 
+//for crud
+Route::get('/books/create', [userController::class, 'create'])
+->name('books.create');
+
+Route::post('/books/store', [userController::class, 'store'])
+->name('books.store');
+
+Route::get('/books/edit/{id}', [userController::class, 'edit'])
+->name('books.edit');
+
+Route::post('/books/update/{id}', [userController::class, 'update'])
+->name('books.update');
+
+Route::delete('/books/delete/{id}', [userController::class, 'destroy'])
+->name('books.delete');
 
 
 
