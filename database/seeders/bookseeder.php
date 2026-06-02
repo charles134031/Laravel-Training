@@ -2,19 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Book;
 
-class DatabaseSeeder extends Seeder
+class bookseeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
-      $this->call(bookseeder::class);
+        Book::Factory()->count(50)->create();
     }
 }

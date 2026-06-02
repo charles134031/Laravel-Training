@@ -6,7 +6,7 @@ Route::get('/', function () {
     return view('login');
 })->name('login');
 
-Route::post('/login' , [AuthController::class, 'login']);
+Route::post('/login' , [userController::class, 'login']);
 
 
 
@@ -31,6 +31,8 @@ Route::get('/myprofile', function () {
 Route::get('/mysettings', function () {
     return view('mysettings');
 })->name('mysettings');
+
+
 
 
 
