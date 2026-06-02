@@ -1,89 +1,120 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/style.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light d-flex align-items-center justify-content-center vh-100">
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5 col-lg-4">
-                
-                <div class="card shadow-sm border-0 rounded-3">
-                    <div class="card-body p-4 p-sm-5">
-                        
-                        <h3 class="card-title text-center mb-4 fw-bold text-dark">Welcome Back</h3>
-                        
-                        <form action="{{route('login') }}" method="POST">
-                            @csrf
 
-                            <div class="form-floating mb-3">
-                                <input type="text" 
-                                       class="form-control @error('username') is-invalid @enderror" 
-                                       id="username" 
-                                       name="username" 
-                                       placeholder="johndoe" 
-                                       value="{{ old('username') }}" 
-                                       required 
-                                       autofocus>
-                                <label for="username">Username</label>
-                                @error('username')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
 
-                            <div class="form-floating mb-3">
-                                <input type="password" 
-                                       class="form-control @error('password') is-invalid @enderror" 
-                                       id="password" 
-                                       name="password" 
-                                       placeholder="Password" 
-                                       required>
-                                <label for="password">Password</label>
-                                @error('password')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+<body class="bg-light">
 
-                            <div class="form-check mb-4 text-start">
-                                <input class="form-check-input" type="checkbox" name="remember" id="rememberMe">
-                                <label class="form-check-input-label text-secondary small" for="rememberMe">
-                                    Remember me
-                                </label>
-                            </div>
 
-                            <button class="btn btn-primary w-100 py-2.5 fw-semibold text-uppercase" type="submit">
-                                Sign In
-                            </button>
-                            
-                        </form>
-                        
-                    </div>
+
+
+<div class="container vh-100">
+    <div class="row justify-content-center align-items-center h-100">
+
+        <div class="col-md-4">
+
+            <div class="card shadow">
+                <div class="card-header text-center">
+                    <h3 class="mb-0">Library Record</h3>
                 </div>
-                
-                <div class="text-center mt-3">
-                    <a href="#" class="text-decoration-none small text-muted">Forgot password?</a>
+                        @if (session('success'))
+                            <div id="alertMessage" class="alert alert-success alert-dismissible fade show m-3" role="alert">
+                                
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill me-2" viewBox="0 0 16 16">
+                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                </svg>
+
+                                {{ session('success') }}
+
+                               
+                            </div>
+                        @endif
+
+                <div class="card-body">
+
+                    <form action="/login" method="POST">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                class="form-control"
+                                name="email"
+                                placeholder="Enter your email"
+                                value="{{ old('email') }}"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                name="password"
+                                placeholder="Enter your password"
+                                required>
+                        </div>
+
+                        <div class="form-check mb-3">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="remember">
+
+                            <label class="form-check-label" for="remember">
+                                Remember Me
+                            </label>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+                            Login
+                        </button>
+
+                    </form>
+
                 </div>
 
+                <div class="card-footer text-center">
+                    <small>
+                        Don't have an account?
+                        <a href="/register">Register Here</a>
+                    </small>
+                </div>
             </div>
+
         </div>
+
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-      
-
-        const username = document.getElementById('username');
-        const password = document.getElementById('password');
-
-        axios.post('/login',{username: username,password: password}).then(response => {})
-        .catch(error => {console.error('Login failed:', error.response.data);});
-
-    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const alertBox = document.getElementById('alertMessage');
+        if (alertBox) {
+            setTimeout(function () {
+                const bsAlert = bootstrap.Alert.getOrCreateInstance(alertBox);
+                bsAlert.close();
+            }, 2500);
+        }
+    });
+</script>
 </body>
 </html>
