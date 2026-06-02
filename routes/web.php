@@ -3,17 +3,29 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Session;
+use App\Models\profile;
 
 
-Route::get('/login', function(){
-return view('login');
-})->name('login');
+
 
 Route::post('/register' , [AuthController::class, 'register'])->name('register');
 Route::get('/register', function(){
 return view('register');
 })->name('register');
 
+//login
+Route::get('/login', function(){
+    if (session()->has('user_id')) {
+        return redirect()->to('/dashboard');
+    }
+    
+    return view('login');
+   
+})->name('login');
+
+
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 
 Route::get('/books', [userController::class, 'index'])->name('books');
@@ -24,6 +36,11 @@ Route::get('/books', [userController::class, 'index'])->name('books');
 
 
 Route::get('/dashboard', function () {
+      if (!session()->has('user_id')) {
+        return redirect()->to('/login');
+    }
+    
+   
     return view('dashboard');
 })->name('dashboard');
 
@@ -33,9 +50,20 @@ Route::get('/movies', function () {
 
 
 
+
+
 Route::get('/myprofile', function () {
-    return view('myprofile');
+  
+    $userId = session('user_id');
+
+    $user = profile::find($userId);
+
+    return view('myprofile', compact('user'));
 })->name('myprofile');
+
+
+Route::post('/saveprofile', [userController::class, 'updateprofile'])->name('myprofile');
+
 
 Route::get('/mysettings', function () {
     return view('mysettings');
@@ -59,6 +87,9 @@ Route::delete('/books/delete/{id}', [userController::class, 'destroy'])
 ->name('books.delete');
 
 
+
+Route::get('/logout', [AuthController::class, 'logout'])
+->name('logout');
 
 
 
