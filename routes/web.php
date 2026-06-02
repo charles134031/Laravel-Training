@@ -1,12 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('login');
 })->name('login');
 
 Route::post('/login' , [userController::class, 'login']);
+
+
+Route::get('/books', [userController::class, 'index']);
+
 
 
 
@@ -20,9 +25,7 @@ Route::get('/movies', function () {
     return view('movies');
 })->name('movies');
 
-Route::get('/books', function () {
-    return view('books');
-})->name('books');
+
 
 Route::get('/myprofile', function () {
     return view('myprofile');

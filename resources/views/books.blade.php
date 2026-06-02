@@ -73,9 +73,72 @@
 
 </style>
 
+<div class="container-fluid p-0">
+        <div class="row">
+            <div class="col-md-10">
+                
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                        <h4 class="mb-0">Book Inventory</h4>
+                        <span class="badge bg-light text-primary fw-bold">Total: {{ $data->total() }} books</span>
+                    </div>
+                    
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped mb-0 align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" class="ps-4">id </th>
+                                        <th scope="col">title</th>
+                                        <th scope="col">author</th>
+                                        <th scope="col">isbn </th>
+                                        <th scope="col">description</th>
+                                        <th scope="col">published_year</th>
+                                        <th scope="col">page_count</th>
+                                        
 
+                                        <th scope="col" class="pe-4">Pages</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($data as $book)
+                                        <tr>
+                                            <td class="fw-bold ps-4 text-muted">{{ $book->id }}</td>
+                                            <td class="fw-semibold text-dark">{{ $book->title }}</td>
+                                            <td>{{ $book->author }}</td>
+                                             <td class="fw-semibold text-dark">{{ $book->isbn  }}</td>
+                                          
+                                            <td>
+                                                <span class="badge bg-secondary text-capitalize">{{ $book->genre ?? 'N/A' }}</span>
+                                            </td>
+                                            <td>{{ $book->published_year ?? 'N/A' }}</td>
+                                             
+                                            <td class="pe-4 text-muted">{{ $book->page_count ?? 'N/A' }} pages</td>
+                                              <td class="fw-semibold text-dark">{{ $book->genre  }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="text-center py-5 text-muted">
+                                                <p class="mb-0 fs-5">No books found in the database.</p>
+                                                <small>Did you forget to run your seeder?</small>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer bg-white py-3 d-flex justify-content-center">
+                        {{ $data->links() }}
+                    </div>
+                </div>
 
-<div class="card overflow-hidden">
+            </div>
+        </div>
+    </div>
+
+<div class="card overflow-hidden mt-5">
     <div class="card-body pt-3">
         <div class="movie-card">
                 <img src="{{ asset('images/book(1).jpg') }}" alt="Avatar Movie Poster" class="movie-poster">
@@ -129,14 +192,14 @@
                         <strong>Description:</strong> The phrase "Every book tells a story" is a timeless truth that goes far deeper than just the plot written on its pages. It speaks to the layers of history, emotion, and human connection embedded in the very existence of a book. At its most literal level, a book is a vessel for imagination or information. Whether it’s a gripping mystery, a sweeping historical epic, or a raw memoir, the primary story is the one the author
                     </p>
                 </div>
-            </div>
-
-            
-
-            
-        
+            </div>  
         </p>
     </div>
 </div>
+
+
+
+
+
 
 @endsection

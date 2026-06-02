@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Book;
 
 use Illuminate\Http\Request;
 
@@ -14,6 +15,14 @@ class userController extends Controller
             'password' => 'required|string'
         ]);
 
+
+    }
+
+    public function index(){
+
+       $data = Book::paginate(10);
+        
+        return view('books',compact('data'));
 
     }
 }
