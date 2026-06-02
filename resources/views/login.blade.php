@@ -32,7 +32,6 @@
                                 {{ session('success') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
-
                         @elseif (session('error'))
                             <div id="alertMessage" class="alert alert-danger alert-dismissible fade show m-3" role="alert">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">

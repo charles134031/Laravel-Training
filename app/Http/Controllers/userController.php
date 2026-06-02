@@ -92,6 +92,7 @@ class userController extends Controller
      public function updateprofile(Request $request) {
 
 
+    //ge call ko anay ang mga request galing sa front end
     $fullname = $request->input('fullname');
     $username = $request->input('username');
     $email = $request->input('email');
@@ -102,19 +103,22 @@ class userController extends Controller
     $confirm_password = $request->input('confirm_password'); 
 
   
+    //dapat validation kag string dapat then requires
     $request->validate([
         'fullname' => ['required', 'string', 'max:255'],
         'username' => ['required', 'string', 'max:255'],
         'email'    => ['required', 'string', 'email', 'max:255'],
     ]);
 
+    //hinanap ko ang row ng data gamit ang seassion ID nito at ni store ko sa variable na user
     $user = profile::find(session('user_id'));
 
+    // then if wlang nahanap or naging null ang user then babalik ito na may error flash seassion
     if (!$user) {
         return redirect()->to('/login')->with('error', 'Session expired.');
     }
 
-   
+    //kong wlng na input na filled sa current_password then e update nya ang lahat maliban sa password then balik sa dashboard
     if (! $request->filled('current_password')) {
         
       
@@ -131,21 +135,21 @@ class userController extends Controller
             ->with('success', 'Profile updated (Password not changed)');
 
     } else {
-
+        //kong may input nmn ang current_password then e validate nya anf password
         $request->validate([
             'current_password' => ['required', 'string'],
             'new_password'     => ['required', 'string', 'min:8'], 
         ]);
-
+        //chaka e verify kong mag tugma ang new password and confirm password, kong hindi ibabalik nya ito sa myprofile tas mag flash session error
         if ($new_password !== $confirm_password) {
             return redirect()
                 ->to('/myprofile') 
                 ->with('error', 'New password and confirmation password do not match.');
         }
 
-        
+        //if tugma na nga ang password, e compare nya nmn and hashed password chaka inputted current password
         if ($user && Hash::check($current_password, $user->password)) {
-
+            //kong mag tugma e update nya lahat kasali na ang password kasi nga naging true ang layer by layer na condition
             $user->update([
                 'name'           => $fullname,
                 'username'       => $username,
@@ -154,12 +158,12 @@ class userController extends Controller
                 'address'        => $address,
                 'password'       => Hash::make($new_password), 
             ]);
-
+                //then e return ito with success flash session
             return redirect()
                 ->to('/dashboard') 
                 ->with('success', 'profile updated');
         }
-
+        //then kong di nmn na tangap ang lahat ng conditions magiging flash error na agad
         return redirect()
             ->to('/myprofile') 
             ->with('error', 'Your current password does not match our records.');
