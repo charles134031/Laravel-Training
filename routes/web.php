@@ -16,13 +16,10 @@ return view('register');
 
 //login
 Route::get('/login', function(){
-    if (session()->has('user_id')) {
-        return redirect()->to('/dashboard');
-    }
     
     return view('login');
    
-})->name('login');
+})->name('login')->middleware('guest');
 
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -36,13 +33,9 @@ Route::get('/books', [userController::class, 'index'])->name('books');
 
 
 Route::get('/dashboard', function () {
-      if (!session()->has('user_id')) {
-        return redirect()->to('/login');
-    }
-    
    
     return view('dashboard');
-})->name('dashboard');
+})->name('dashboard')->middleware('auth');
 
 Route::get('/movies', function () {
     return view('movies');
@@ -54,9 +47,9 @@ Route::get('/movies', function () {
 
 Route::get('/myprofile', function () {
   
-    $userId = session('user_id');
+    
 
-    $user = profile::find($userId);
+    $user = auth()->user();
 
     return view('myprofile', compact('user'));
 })->name('myprofile');
