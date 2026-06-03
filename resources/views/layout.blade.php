@@ -77,6 +77,12 @@
                                     <span>Book</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('author') ? 'active' : '' }}" href="/author">
+                                    <span>Author</span>
+                                </a>
+                            </li>
+                            
 
                         </ul>
                     </div>

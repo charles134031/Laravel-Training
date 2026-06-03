@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\profile;
+use App\Models\author;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -26,8 +27,8 @@ class userController extends Controller
 
     public function index(){
 
-       $data = Book::paginate(10);
-        
+       $data = Book::with('author')->paginate(5);
+      
         return view('books',compact('data'));
 
     }
@@ -35,26 +36,75 @@ class userController extends Controller
 
     public function create()
     {
-      return view('books_form');
+
+      
+    $authors = Author::orderBy('name')->get();
+
+    return view('books_form', compact('authors'));
+    }
+
+
+
+    public function author_create()
+    {
+      return view('author_add_form');
     }
 
     public function store(Request $request)
+{
+  
+   
+    // 1. I-validate ang mga field (Huwag mo nang i-validate si author_id dito)
+    $request->validate([
+        'title'          => 'required',
+        'genre'          => 'required',
+        'author_id' => 'required|integer|exists:author,id',
+        'published_year' => 'required',
+        'book_file'      => 'nullable|image|max:2048' 
+    ]);
+
+    
+    // 2. Kunin ang lahat ng inputs
+    $data = $request->all();
+
+    // 3. Piliting gawing 1 ang author_id para makalusot sa Database Constraint
+    // TANDAAN: Dapat mayroon kang kahit isang author sa iyong 'author' table na may ID = 1
+    
+
+    // 4. I-proseso ang file upload kung meron
+    if ($request->hasFile('book_file')) {
+        $filename = time() . '.' . $request->file('book_file')->getClientOriginalExtension();
+        $path = $request->file('book_file')->storeAs('books', $filename, 'public');
+        
+        $data['cover'] = $path;
+    }
+
+    // 5. I-save na sa database (Hindi na ito mag-e-error ng "cannot be null")
+    Book::create($data);
+
+    
+    return redirect()
+        ->route('books')
+        ->with('success', 'Book added successfully.');
+}
+
+
+      public function store_author(Request $request)
     {
         $request->validate([
-        'title' => 'required',
-        'author' => 'required',
-        'genre' => 'required',
-        'published_year' => 'required'
-    ]);
+        'name' => 'required',
+       
+      ]);
 
   
 
-    Book::create($request->all());
+         author::create($request->all());
 
         return redirect()
-        ->route('books')
+        ->route('author')
         ->with('success', 'Book added successfully.');
     }
+
 
     public function edit($id)
     {
@@ -63,28 +113,68 @@ class userController extends Controller
         return view('books_form', compact('book'));
     }
 
+    public function edit_author($id)
+    {
+        $authordata = author::findOrFail($id);
+
+        return view('author_form', compact('authordata'));
+    }
+
+    
+
     public function update(Request $request, $id)
     {
     $book = Book::findOrFail($id);
 
     $book->update([
         'title' => $request->title,
-        'author' => $request->author,
+        'author_id' => $request->author,
         'genre' => $request->genre,
         'published_year' => $request->published_year,
     ]);
+
+
+    
 
     return redirect()
         ->route('books')
         ->with('success', 'Book updated successfully.');
     }
 
+
+    public function updateauthor(Request $request, $id)
+{
+    // 1. Find the author safely
+    $author = author::findOrFail($id);
+
+    // 2. Execute the update using the form input
+    $author->update([
+        'name' => $request->input('name'),
+    ]);
+
+    // 3. Return to the list view with the correct success message
+    return redirect()
+        ->route('author')
+        ->with('success', 'Author updated successfully.');
+}
+    
+
     public function destroy($id)
     {
     Book::findOrFail($id)->delete();
-
+ 
         return redirect()
         ->route('books')
+        ->with('success', 'Book deleted successfully.');
+    }
+
+
+     public function destroy_author($id)
+    {
+    author::findOrFail($id)->delete();
+ 
+        return redirect()
+        ->route('author')
         ->with('success', 'Book deleted successfully.');
     }
 
@@ -111,10 +201,10 @@ class userController extends Controller
     ]);
 
     //hinanap ko ang row ng data gamit ang seassion ID nito at ni store ko sa variable na user
-    $user = profile::find(session('user_id'));
+    $user = auth()->user();
 
     // then if wlang nahanap or naging null ang user then babalik ito na may error flash seassion
-    if (!$user) {
+    if ($user === null) {
         return redirect()->to('/login')->with('error', 'Session expired.');
     }
 

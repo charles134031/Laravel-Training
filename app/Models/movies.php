@@ -4,25 +4,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory; 
 use Illuminate\Database\Eloquent\Model;
 
-class Book extends Model
+class movies extends Model
 {
-    use HasFactory;
-    protected $table = 'books';
-    protected $fillable = [
+          use HasFactory;
+          protected $table = 'movies';
+          protected $fillable = [
         'title',
-        'author_id',
-        'isbn',
         'description',
-        'published_year',
-        'page_count',
-        'genre',
-        'cover'
+        'synopsis',
+        'author_id',
+        'cover_image'
+       
     ];
 
     public function author(){
          return $this->belongsTo(author::class, 'author_id');
     }
-       
-    
-
 }

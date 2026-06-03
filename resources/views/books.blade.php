@@ -16,6 +16,20 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 20px auto;
 }
+.card-body {
+    display: flex;
+    flex-direction: row;
+    background: #352c2c;
+    gap: 20px;
+}
+
+.movie-showcase-body {
+    display: flex;
+    flex-direction: row;
+    background: #352c2c;
+    gap: 20px;
+    padding: 1rem;
+}
 
 /* Image Styling */
 .movie-poster {
@@ -68,9 +82,6 @@
     background: #352c2c;
     gap: 20px;
 }
-
-
-
 </style>
 
 <div class="container-fluid p-0">
@@ -91,7 +102,7 @@
                     </div>
                 </div>
                 
-                <div class="card-body p-0 w-100">
+                <div class="card-body p-0 w-100" style="display: block; background: transparent;">
     <div class="table-responsive w-100">
         <table class="table table-hover table-striped mb-0 align-middle w-100">
             
@@ -102,6 +113,7 @@
                     <th>Author</th>
                     <th>Genre</th>
                     <th>Publication Year</th>
+                    <th>Cover</th>
                     <th width="180">Action</th>
                 </tr>
             </thead>
@@ -111,11 +123,23 @@
                     <tr>
                         <td>{{ $book->id }}</td>
                         <td class="fw-semibold text-dark">{{ $book->title }}</td>
-                        <td>{{ $book->author }}</td>
+                        <td>{{ $book->author->name ?? 'No Author' }}</td>
                         <td>
                             <span class="badge bg-secondary text-capitalize">{{ $book->genre ?? 'N/A' }}</span>
                         </td>
                         <td>{{ $book->published_year ?? $book->publication_year ?? 'N/A' }}</td>
+                        
+                        <td>
+                            @if($book->cover)
+                                <img src="{{ asset('storage/' . $book->cover) }}" 
+                                     alt="{{ $book->title }} Cover" 
+                                     class="img-thumbnail" 
+                                     style="width: 60px; height: 80px; object-fit: cover;">
+                            @else
+                                <span class="badge bg-light text-muted border">No Image</span>
+                            @endif
+                        </td>
+
                         <td>
                             <a href="/books/edit/{{ $book->id }}" class="btn btn-warning btn-sm">
                                 Edit
@@ -132,7 +156,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">
+                        <td colspan="7" class="text-center py-5 text-muted">
                             <p class="mb-0 fs-5">No books found in the database.</p>
                             <small>Did you forget to seed your database tables?</small>
                         </td>
@@ -248,10 +272,5 @@
         
     </div>
 </div>
-
-
-
-
-
 
 @endsection
