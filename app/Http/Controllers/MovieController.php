@@ -48,15 +48,17 @@ class MovieController extends Controller
     ]);
 
     // 2. I-handle ang file upload (GAMITIN ang $validatedData para sa logic)
-    if ($request->hasFile('cover_image')) {
-    // 1. I-store ang file sa 'movies' folder
-    $path = $request->file('cover_image')->store('movies', 'public');
     
-    // 2. Gamitin ang basename() para makuha lang ang file name (tinatanggal ang 'movies/')
-    $filename = basename($path);
+if ($request->hasFile('cover_image')) {
+    // 1. Kunin ang original file name
+    $originalName = $request->file('cover_image')->getClientOriginalName();
     
-    // 3. I-save lang ang filename sa database
-    $validatedData['cover_image'] = $filename;
+    // 2. I-store ang file gamit ang orihinal na pangalan sa 'movies' folder
+    // Ang path ay magiging 'movies/filename.jpg'
+    $path = $request->file('cover_image')->storeAs('movies', $originalName, 'public');
+    
+    // 3. I-save ang full path sa database
+    $validatedData['cover_image'] = $path;
 }
     // 3. I-save sa database gamit ang $validatedData
     // HUWAG gamitin ang $request->all() dahil baka may extra input na hindi sa table
@@ -67,4 +69,58 @@ class MovieController extends Controller
         ->with('success', 'Movie added successfully.');
 }
 
-}
+
+        public function update($id, Request $request){
+            dd($request->all());
+        }
+
+        public function edit($id){
+            
+            $data = movies::with('author')->findOrFail($id);
+            $authors = Author::orderBy('name')->get();
+
+           
+
+            return view('movies_form', compact('data', 'authors'));
+        }
+
+        public function updatemovies($id, Request $request){
+            // 1. I-validate ang input
+            $validatedData = $request->validate([
+                'title'       => 'required|string|max:255',
+                'description' => 'required',
+                'author_id'   => 'required|integer|exists:author,id',
+                'synopsis'    => 'required',
+                'cover_image' => 'nullable|image|max:2048' 
+            ]);
+
+            // 2. I-handle ang file upload kung meron
+            if ($request->hasFile('cover_image')) {
+                //compare and delete old file
+                $movie = movies::findOrFail($id);
+                if ($movie->cover_image && $movie->cover_image 
+                !== $request->file('cover_image')->getClientOriginalName()) {
+                    //delete old file
+                    \Storage::disk('public')->delete($movie->cover_image);
+                }
+
+                //store new file
+                $originalName = $request->file('cover_image')->getClientOriginalName();
+                $path = $request->file('cover_image')->storeAs('movies', $originalName, 'public');
+                $validatedData['cover_image'] = $path;
+
+                //if delete success update new data to database
+                $movie->update($validatedData);
+            } else {
+                //if no new file just update other data
+                $movie = movies::findOrFail($id);
+                $movie->update($validatedData);
+            }
+
+            return redirect()
+                ->route('movies')
+                ->with('success', 'Movie updated successfully.');
+
+        }
+        
+}   

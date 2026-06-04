@@ -47,7 +47,7 @@ class userController extends Controller
 
     public function author_create()
     {
-      return view('author_add_form');
+      return view('author_form');
     }
 
     public function store(Request $request)

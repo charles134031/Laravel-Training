@@ -86,21 +86,19 @@ Route::delete('/books/delete/{id}', [userController::class, 'destroy'])
 
 Route::get('/movies', [MovieController::class, 'index'])->name('movies');
 
-Route::post('/movies/store', [MovieController::class, 'store'])
-->name('store.create');
+
 
 Route::get('/movies/create', [MovieController::class, 'create'])
 ->name('movies.create');
-
+//for adding movies data to database
 Route::post('/movies/store', [MovieController::class, 'store'])
 ->name('movies.store');
-
+//for disaplaying movies data to database
 Route::get('/movies/edit/{id}', [MovieController::class, 'edit'])
 ->name('movies.edit');
-
-Route::post('/movies/update/{id}', [MovieController::class, 'update'])
-->name('movies.update');
-
+//for updating movies data to database
+Route::put('/movies/update/{id}', [MovieController::class, 'updatemovies'])->name('movies.update');
+//for deleting movies data to database
 Route::delete('/movies/delete/{id}', [MovieController::class, 'destroy'])
 ->name('movies.delete');
 /////////////////////////////

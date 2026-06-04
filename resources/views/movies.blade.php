@@ -73,15 +73,13 @@
 </style>
 
 
-
 <div class="container-fluid p-0">
     <div class="row g-0">
         <div class="col-12">
-            
             <div class="card rounded-0 border-0 shadow-sm">
                 
                 <div class="card-header d-flex justify-content-between align-items-center py-3">
-                    <h5 class="mb-0">movie List</h5>
+                    <h5 class="mb-0">Movie List</h5>
                     <div>
                         <span class="badge bg-primary me-2">
                             Total movies: {{ $data->total() }}
@@ -92,74 +90,62 @@
                     </div>
                 </div>
                 
-                <div class="card-body p-0 w-100" style="display: block; background: transparent;">
-    <div class="table-responsive w-100">
-        <table class="table table-hover table-striped mb-0 align-middle w-100">
-            
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Author ID</th>
-                    <th>Synopsis</th>
-                    <th>Cover Image</th>
-                    <th width="180">Action</th>
-                </tr>
-            </thead>
-            
-            <tbody>
-                @forelse($data as $movie)
-                    <tr>
-                        <td>{{ $movie->id }}</td>
-                        <td class="fw-semibold text-dark">{{ $movie->title }}</td>
-                        <td>{{ $movie->author->name ?? 'No Author' }}</td>
-                        <td>
-                            <span class="badge bg-secondary text-capitalize">{{ $movie->genre ?? 'N/A' }}</span>
-                        </td>
-                        <td>{{ $movie->published_year ?? $movie->publication_year ?? 'N/A' }}</td>
-                        
-                        <td>
-                            @if($movie->cover)
-                                <img src="{{ asset('storage/' . $movie->cover) }}" 
-                                     alt="{{ $movie->title }} Cover" 
-                                     class="img-thumbnail" 
-                                     style="width: 60px; height: 80px; object-fit: cover;">
-                            @else
-                                <span class="badge bg-light text-muted border">No Image</span>
-                            @endif
-                        </td>
+                <div class="card-body p-0 w-100">
+                    <div class="table-responsive w-100">
+                        <table class="table table-hover table-striped mb-0 align-middle w-100">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Author</th>
+                                    <th>Synopsis</th>
+                                    <th>Cover Image</th>
+                                    <th width="180">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($data as $movie)
+                                    <tr>
+                                        <td>{{ $movie->id }}</td>
+                                        <td class="fw-semibold">{{ $movie->title }}</td>
+                                        <td>{{ $movie->description ?? 'N/A' }}</td>
+                                        <td>{{ $movie->author->name ?? 'No Author' }}</td>
+                                        <td>{{ $movie->synopsis ?? 'No Synopsis' }}</td>
+                                        <td>
+                                            @if($movie->cover_image)
+                                                <img src="{{ asset('storage/' . $movie->cover_image) }}" 
+                                                     alt="Cover" class="img-thumbnail" 
+                                                     style="width: 60px; height: 80px; object-fit: cover;">
+                                            @else
+                                                <span class="badge bg-light text-muted border">No Image</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="/movies/edit/{{ $movie->id }}" class="btn btn-warning btn-sm">Edit</a>
+                                            <form action="/movies/delete/{{ $movie->id }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE') 
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4">No movies found in the database.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                        <td>
-                            <a href="/movies/edit/{{ $movie->id }}" class="btn btn-warning btn-sm">
-                                Edit
-                            </a>
+                <div class="card-footer d-flex justify-content-center p-3">
+                    {{ $data->links() }}
+                </div>
 
-                            <form action="/movies/delete/{{ $movie->id }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE') 
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this movie?')">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <td>
-                            @if($movie->cover_image)
-                                <img src="{{ asset('storage/' . $book->cover) }}" 
-                                     alt="{{ $movie->title }} Cover" 
-                                     class="img-thumbnail" 
-                                     style="width: 60px; height: 80px; object-fit: cover;">
-                            @else
-                                <span class="badge bg-light text-muted border">No Image</span>
-                            @endif
-                        </td>
-                @endforelse
-            </tbody>
-            
-        </table>
+            </div>
+        </div>
     </div>
 </div>
-
 @endsection

@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', isset($movie) ? 'Edit Movie' : 'Add Movie')
+@section('title', isset($data) ? 'Edit Movie' : 'Add Movie')
 
 @section('content')
 
@@ -8,31 +8,32 @@
 
     <div class="card-header">
         <h5>
-            {{ isset($movie) ? 'Edit Movie' : 'Add Movie' }}
+            {{ isset($data) ? 'Edit Movie' : 'Add Movie' }}
         </h5>
     </div>
 
     <div class="card-body">
 
         <form
-            action="{{ isset($movie) ? route('movies.update', $movie->id) : route('movies.store') }}"
+            action="{{ isset($data) ? route('movies.update', $data->id) : route('movies.store') }}"
             method="POST"
             enctype="multipart/form-data">
 
             @csrf
             
-            {{-- BUG FIX 1: Method Spoofing para sa Edit Route --}}
-            @if(isset($movie))
+         
+            @if(isset($data))
                 @method('PUT')
             @endif
 
             <div class="mb-3">
-                <label class="form-label">title</label>
+                <label class="form-label" >Title</label>
                 <input
                     type="text"
                     name="title"
                     class="form-control"
-                    value="{{ old('title', $movie->title ?? '') }}">
+                    value="{{ old('title', $data->title ?? '') }}"
+                    required>
             </div>
 
             <div class="mb-3">
@@ -41,23 +42,24 @@
                     type="text"
                     name="description"
                     class="form-control"
-                    value="{{ old('title', $movie->title ?? '') }}">
+                    value="{{ old('description', $data->description ?? '') }}"
+                    required>
             </div>
 
              <div class="mb-3">
-    <label for="author_id" class="form-label">Author</label>
-    <select name="author_id" id="author_id" class="form-control" required>
-        <option value="" disabled {{ old('author_id', $movie->author_id ?? '') == '' ? 'selected' : '' }}>
-            -- Select Author --
-        </option>
-        
-        @foreach($authors as $author)
-            <option value="{{ $author->id }}" {{ old('author_id', $movie->author_id ?? '') == $author->id ? 'selected' : '' }}>
-                {{ $author->name }}
-            </option>
-        @endforeach
-    </select>
-</div>
+                <label for="author_id" class="form-label">Author</label>
+                <select name="author_id" id="author_id" class="form-control" required>
+                    <option value="" disabled {{ old('author_id', $data->author_id ?? '') == '' ? 'selected' : '' }}>
+                        -- Select Author --
+                    </option>
+                    
+                    @foreach($authors as $author)
+                        <option value="{{ $author->id }}" {{ old('author_id', $data->author_id ?? '') == $author->id ? 'selected' : '' }}>
+                            {{ $author->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
             <div class="mb-3">
                 <label class="form-label">Synopsis</label>
@@ -65,7 +67,7 @@
                     type="text"
                     name="synopsis"
                     class="form-control"
-                    value="{{ old('title', $movie->title ?? '') }}">
+                    value="{{ old('synopsis', $data->synopsis ?? '') }}">
             </div>
 
             
@@ -82,11 +84,15 @@
                     type="file" 
                     name="cover_image" 
                     class="form-control">
-                
-                {{-- UG FIX 2: pinalitan ng $movie->cover para tugma sa controller mo --}}
-                @if(isset($movie) && $movie->cover)
-                    <div class="form-text text-muted mt-1">
-                        Current file: <span class="badge bg-light text-dark border">{{ $movies->cover_image }}</span>
+              
+                @if(isset($data) && $data->cover_image)
+                    <div class="mt-3">
+                        <p class="mb-1">Current Cover Image:</p>
+                        <img 
+                            src="{{ asset('storage/' . $data->cover_image) }}" 
+                            alt="Cover Image" 
+                            class="img-thumbnail" 
+                            style="width: 120px; height: 160px; object-fit: cover;">
                     </div>
                 @endif
             </div>
